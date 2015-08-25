@@ -1,3 +1,4 @@
-export { default as core } from './core';
-export { default as decorators } from './decorators';
-export { default as utils } from './utils';
+import * as core from './core';
+import * as decorators from './decorators';
+import utils from './utils';
+export default { core, decorators, utils };

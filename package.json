@@ -1,16 +1,20 @@
 {
   "name": "fnutil",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "ES6 Functional Utilities",
   "main": "lib/index.js",
   "scripts": {
     "compile": "babel --stage 0 --out-dir lib src",
+    "test": "npm run compile && babel-tape-runner test/**/*.js | tap-spec",
     "prepublish": "npm run compile"
   },
   "author": "Joe Harlow",
   "license": "ISC",
   "devDependencies": {
     "babel": "^5.5.6",
-    "babel-runtime": "^5.5.6"
+    "babel-runtime": "^5.5.6",
+    "babel-tape-runner": "^1.2.0",
+    "tap-spec": "^4.1.0",
+    "tape": "^4.2.0"
   }
 }
