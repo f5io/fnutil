@@ -10,6 +10,10 @@ export default {
 		return x.filter(fn)
 	},
 	@curry
+	filterNot(fn, x) {
+		return x.filter(y => !fn(y));
+	},
+	@curry
 	reduce(fn, y, x) {
 		return x.reduce(fn, y);
 	}
