@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "compile": "babel --stage 0 --out-dir lib src",
-    "test": "npm run compile && babel-tape-runner test/**/*.js | tap-spec",
+    "test": "npm run compile && babel-tape-runner test/**/*.js | tap-difflet",
+    "watch": "watch 'npm run compile && npm test' src",
     "prepublish": "npm run compile"
   },
   "author": "Joe Harlow",
@@ -14,7 +15,8 @@
     "babel": "^5.5.6",
     "babel-runtime": "^5.5.6",
     "babel-tape-runner": "^1.2.0",
-    "tap-spec": "^4.1.0",
-    "tape": "^4.2.0"
+    "tap-difflet": "^0.3.0",
+    "tape": "^4.2.0",
+    "watch": "^0.16.0"
   }
 }
