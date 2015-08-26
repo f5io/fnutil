@@ -8,5 +8,8 @@ export default function memoize(fn) {
 		if (!cache.has(key)) cache.set(key, fn(...a));
 		return cache.get(key);
 	}
-	return Object.defineProperty(memo, 'length', { value: fn.length });
+	return Object.defineProperties(memo, {
+		length: { value: fn.length },
+		_cache: { value: () => cache }
+	});
 }

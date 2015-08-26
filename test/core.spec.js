@@ -37,11 +37,10 @@ test('[core] curryRight', t => {
 });
 
 test('[core] memoize', t => {
-	t.plan(1);
+	t.plan(3);
 	let fn = memoize(toCurry);
-	console.log(toCurry.length, fn.length);
 	t.equal(fn.length, toCurry.length, 'should retain a function`s arity');
-	// t.equal(fn(1, 2, 3), 5, 'should return the expected result');
-	// t.equal(fn._cache().size, 1, 'should cache resulting calls');
+	t.equal(fn(1, 2, 3), 5, 'should return the expected result');
+	t.equal(fn._cache().size, 1, 'should cache resulting calls');
 });
 

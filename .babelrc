@@ -1,3 +1,4 @@
 {
+	"stage": 0,
 	"optional" : ["runtime", "es7.decorators", "es7.objectRestSpread"]
 }
