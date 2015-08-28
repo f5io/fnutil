@@ -4,8 +4,10 @@ import {
 	composeLeft,
 	curry,
 	curryRight,
+	filterSplit,
 	memoize
 } from '../lib/core';
+import { filter } from '../lib/utils';
 
 let minusTwo = x => x - 2;
 let plusFour = x => x + 4;

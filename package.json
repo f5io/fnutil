@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "babel --stage 0 --out-dir lib src",
     "test": "npm run compile && babel-tape-runner test/**/*.js | tap-difflet",
-    "watch": "watch 'npm run compile && npm test' src",
+    "watch": "watch 'npm test' src test",
     "prepublish": "npm run compile"
   },
   "author": "Joe Harlow",
