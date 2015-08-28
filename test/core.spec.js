@@ -1,30 +1,11 @@
 import test from 'tape';
 import {
-	compose,
-	composeLeft,
 	curry,
 	curryRight,
-	filterSplit,
 	memoize
 } from '../lib/core';
-import { filter } from '../lib/utils';
 
-let minusTwo = x => x - 2;
-let plusFour = x => x + 4;
-let timesTwo = x => x * 2;
 let toCurry = (x, y, z) => (x * y) + z;
-
-test('[core] compose', t => {
-	t.plan(1);
-	let fn = compose(timesTwo, plusFour, minusTwo);
-	t.equal(fn(9), 22, 'should reduce functions right to left');
-});
-
-test('[core] composeLeft', t => {
-	t.plan(1);
-	let fn = composeLeft(timesTwo, plusFour, minusTwo);
-	t.equal(fn(9), 20, 'should reduce functions left to right');
-});
 
 test('[core] curry', t => {
 	t.plan(1);

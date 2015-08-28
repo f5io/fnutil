@@ -5,6 +5,8 @@ import {
 	filterSplit,
 	flatten,
 	combine,
+  compose,
+  composeLeft,
 	map,
 	reduce,
 	sort,
@@ -15,6 +17,21 @@ const data = Array.from({ length: 10 }, (v, k) => ++k);
 
 let divisibleByTwo = x => x % 2 === 0;
 let divisibleByThree = x => x % 3 === 0;
+let minusTwo = x => x - 2;
+let plusFour = x => x + 4;
+let timesTwo = x => x * 2;
+
+test('[utils] compose', t => {
+  t.plan(1);
+  let fn = compose(timesTwo, plusFour, minusTwo);
+  t.equal(fn(9), 22, 'should reduce functions right to left');
+});
+
+test('[utils] composeLeft', t => {
+  t.plan(1);
+  let fn = composeLeft(timesTwo, plusFour, minusTwo);
+  t.equal(fn(9), 20, 'should reduce functions left to right');
+});
 
 test('[utils] filter', t => {
 	t.plan(1);
