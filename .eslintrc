@@ -4,12 +4,8 @@
     "es6": true
   },
   "ecmaFeatures": {
-    "jsx": true,
     "modules": true
   },
-  "plugins": [
-    "react"
-  ],
   "rules": {
     "quotes": [1, "single"],
     "no-underscore-dangle": 0
