@@ -1,6 +1,6 @@
 {
   "name": "fnutil",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ES6 Functional Utilities",
   "main": "lib/index.js",
   "repository": "https://github.com/f5io/fnutil",
@@ -8,7 +8,8 @@
     "compile": "babel --stage 0 --out-dir lib src",
     "test": "npm run compile && babel-tape-runner test/**/*.js | tap-difflet",
     "watch": "watch 'npm test' src test",
-    "prepublish": "npm run compile"
+    "prepublish": "npm run compile",
+    "postinstall": "npm run compile"
   },
   "author": "Joe Harlow",
   "license": "ISC",
