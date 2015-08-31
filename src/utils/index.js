@@ -38,6 +38,12 @@ export default {
     return (x) => a.reduce((acc, fn) =>
       acc.push(fn(x)) && acc, []);
   },
-  flatten,
-  combine: flatten
+  flatten(a) {
+    return a.reduce((acc, x) =>
+      Array.isArray(x) ? acc.concat(flatten(x)) :
+      acc.concat(x), []);
+  },
+  combine(a) {
+    return a.reduce((acc, x) => acc.concat(x));
+  }
 };
