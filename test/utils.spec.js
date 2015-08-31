@@ -58,9 +58,10 @@ test('[utils] flatten', t => {
 });
 
 test('[utils] combine', t => {
-  t.plan(1);
+  t.plan(2);
   let d = [['one', 1, 'two', 2], ['three', 3, 'four', 4]];
   t.deepEqual(combine(d), ['one', 1, 'two', 2, 'three', 3, 'four', 4], 'should concat arrays together');
+  t.deepEqual(combine([]), [], 'should work with an empty array');
 });
 
 test('[utils] map', t => {

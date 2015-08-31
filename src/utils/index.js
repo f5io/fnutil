@@ -44,6 +44,6 @@ export default {
       acc.concat(x), []);
   },
   combine(a) {
-    return a.reduce((acc, x) => acc.concat(x));
+    return a.reduce((acc, x) => acc.concat(x), []);
   }
 };
