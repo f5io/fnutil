@@ -1,5 +1,6 @@
 import test from 'tape';
 import lib from '../lib';
+import { filterNot, curryRight } from '../lib';
 import { curry } from '../lib/core';
 import {
   filter,
@@ -29,6 +30,12 @@ test('[lib] tools can be destructured', t => {
   t.ok(curry, 'curry should be defined');
   t.ok(curryDec, 'curry decorator should be defined');
   t.ok(map, 'curried map should be defined');
+});
+
+test('[lib] tools are exposed on the lib root', t => {
+  t.plan(2);
+  t.ok(filterNot, 'filterNot should be defined');
+  t.ok(curryRight, 'curryRight should be defined');
 });
 
 test('[lib] composing some functions', t => {
