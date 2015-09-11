@@ -42,7 +42,7 @@ test('[utils] filter', t => {
 test('[utils] filterNot', t => {
   t.plan(1);
   let fn = filterNot(divisibleByTwo);
-  t.deepEqual(fn(data), [1, 3, 5, 7, 9], 'should curry and inverse and array`s filter method');
+  t.deepEqual(fn(data), [1, 3, 5, 7, 9], 'should curry and inverse an array`s filter method');
 });
 
 test('[utils] filterSplit', t => {
