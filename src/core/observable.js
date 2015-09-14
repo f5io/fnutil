@@ -52,6 +52,7 @@ let Observable = {
   onValue(fn) {
     this.listeners.push(fn);
     if (this.active) fn(this.fn(this.value));
+    return this;
   },
   valueOf() {
     return this.fn(this.value);
@@ -81,6 +82,22 @@ function merge(...obs) {
   obs.forEach(o => {
     o.subscribers.push(ob);
     o._handle(o.value);
+  });
+  return ob;
+}
+
+function combine(obs, combinator = id) {
+  let ob = of(combinator);
+  let buffer = [];
+  let addToBuffer = (i, v) => {
+    buffer[i] = v;
+    if (obs.length === buffer.filter(x => x).length) {
+      ob.plug(buffer);
+      buffer = [];
+    }
+  };
+  obs.forEach((o, i) => {
+    o.map(addToBuffer.bind(null, i));
   });
   return ob;
 }
@@ -117,4 +134,4 @@ function of(val = id, proto = {}) {
   });
 }
 
-export default { merge, of };
+export default { merge, combine, of };
