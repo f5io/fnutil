@@ -170,3 +170,16 @@ test('[core] Observable.plug', t => {
   obs.map(x => x * 2).filter(x => x === 8).onValue(v => t.equal(v, 8, 'should only fire once with the correct value'));
   obs.plug(4);
 });
+
+test('[core] Observable.onError', t => {
+  t.plan(1);
+  let obs = observable.of(1).mapPromise(v =>
+    new Promise((r, reject) => setTimeout(reject, 100, v * 100)));
+  obs.onError(err => t.pass('error handler should fire'));
+});
+
+test('[core] Observable.onValue', t => {
+  t.plan(1);
+  let obs = observable.of(1);
+  obs.onValue(v => t.pass('value handler should fire'));
+});

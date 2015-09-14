@@ -1,10 +1,14 @@
 const id = x => x;
-
-let descriptor = {
+const descriptor = {
   writable: false,
   enumerable: false,
   configurable: true
 };
+
+const EMIT = Symbol('Obs.EMIT');
+const ERROR = Symbol('Obs.ERROR');
+const ACTIVE = Symbol('Obs.ACTIVE');
+const HANDLE = Symbol('Obs.HANDLE');
 
 let Observable = {
   map(f) {
@@ -15,11 +19,15 @@ let Observable = {
   },
   mapPromise(f) {
     let obs = of(id, {
-      _handle: function(v) {
-        f(v).then(x => {
-          this._setActive(true);
-          this._emit(x);
-        }).catch(e => console.log('err', e));
+      [HANDLE]: function(v) {
+        f(v)
+          .then(x => {
+            this[ACTIVE](true);
+            this[EMIT](x);
+          })
+          .catch(e => {
+            this[ERROR](e);
+          });
       }
     });
     if (this.active) obs.plug(this.fn(this.value), false);
@@ -28,10 +36,10 @@ let Observable = {
   },
   filter(f) {
     let obs = of(id, {
-      _handle: function(v) {
+      [HANDLE]: function(v) {
         let res = f(v);
-        this._setActive(!!res);
-        this._emit(v);
+        this[ACTIVE](!!res);
+        this[EMIT](v);
       }
     });
     if (this.active) obs.plug(this.fn(this.value), false);
@@ -45,43 +53,51 @@ let Observable = {
     Object.defineProperty(this, 'value', {
       value: v
     });
-    this._setActive(active);
-    this._handle(this.value);
+    this[ACTIVE](active);
+    this[HANDLE](this.value);
     return this;
   },
   onValue(fn) {
-    this.listeners.push(fn);
+    this.valueListeners.push(fn);
     if (this.active) fn(this.fn(this.value));
+    return this;
+  },
+  onError(fn) {
+    this.errorListeners.push(fn);
     return this;
   },
   valueOf() {
     return this.fn(this.value);
   },
-  _setActive(boo) {
-    this.subscribers.forEach(obs => obs._setActive(boo));
+  [ACTIVE]: function(boo) {
+    this.subscribers.forEach(obs => obs[ACTIVE](boo));
     return Object.defineProperty(this, 'active', {
       value: boo
     });
   },
-  _handle(v) {
-    this._emit(this.fn(v));
+  [HANDLE]: function(v) {
+    this[EMIT](this.fn(v));
   },
-  _emit(v) {
+  [EMIT]: function(v) {
     if (!this.active) return;
-    this.listeners.forEach(fn => fn(v), this);
+    this.valueListeners.forEach(fn => fn(v));
     this.subscribers.forEach(obs => obs.plug(v, this.active));
+  },
+  [ERROR]: function(err) {
+    this.errorListeners.forEach(fn => fn(err));
+    this.subscribers.forEach(obs => obs[ERROR](err));
   }
 }
 
 function merge(...obs) {
   let ob = of(id, {
-    _handle: function(v) {
-      setTimeout(() => this._emit(this.fn(v)));
+    [HANDLE]: function(v) {
+      setTimeout(() => this[EMIT](this.fn(v)));
     }
   });
   obs.forEach(o => {
     o.subscribers.push(ob);
-    o._handle(o.value);
+    o[HANDLE](o.value);
   });
   return ob;
 }
@@ -127,7 +143,11 @@ function of(val = id, proto = {}) {
       value: [],
       ...descriptor
     },
-    listeners: {
+    valueListeners: {
+      value: [],
+      ...descriptor
+    },
+    errorListeners: {
       value: [],
       ...descriptor
     }
