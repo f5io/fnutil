@@ -11,7 +11,7 @@ import {
   reduce,
   sort,
   uniq
-} from '../lib/utils';
+} from '../utils';
 
 const data = Array.from({ length: 10 }, (v, k) => ++k);
 

@@ -4,7 +4,7 @@ import {
   curryRight,
   memoize,
   observable
-} from '../lib/core';
+} from '../core';
 
 let toCurry = (x, y, z) => (x * y) + z;
 

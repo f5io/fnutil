@@ -3,7 +3,7 @@ import {
 	curry,
 	curryRight,
 	memoize
-} from '../lib/decorators';
+} from '../decorators';
 
 test('[decorators] curry', t => {
 	t.plan(1);
