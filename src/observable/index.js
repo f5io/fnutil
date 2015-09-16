@@ -110,12 +110,12 @@ function merge(...obs) {
 }
 
 function combine(obs, combinator = id) {
-  let ob = of(combinator);
+  let ob = of();
   let buffer = [];
   let addToBuffer = (i, v) => {
     buffer[i] = v;
-    if (obs.length === buffer.filter(x => x).length) {
-      ob.plug(buffer);
+    if (obs.length === buffer.filter(x => typeof x !== 'undefined').length) {
+      ob.plug(combinator(buffer));
       buffer = [];
     }
   };
