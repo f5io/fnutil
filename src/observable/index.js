@@ -59,8 +59,9 @@ let Observable = {
   },
   sampledBy(obs) {
     let ob = of();
-    this.subscribers.push(ob);
-    obs.map(() => this[HANDLE](this.value));
+    obs.map(() => {
+      ob.plug(this.fn(this.value))
+    });
     return ob;
   },
   onValue(fn) {
