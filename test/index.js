@@ -18,9 +18,10 @@ let divisibleByTwo = filter(x => x % 2 === 0);
 let divisibleByThree = filter(x => x % 3 === 0);
 
 test('[lib] all tools exist in package', t => {
-  t.plan(3);
+  t.plan(4);
   t.ok(lib.core, 'lib.core should be defined');
   t.ok(lib.decorators, 'lib.decorators should be defined');
+  t.ok(lib.observable, 'lib.observable should be defined');
   t.ok(lib.utils, 'lib.utils should be defined');
 });
 
