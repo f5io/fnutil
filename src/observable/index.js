@@ -57,6 +57,12 @@ let Observable = {
     this[HANDLE](this.value);
     return this;
   },
+  sampledBy(obs) {
+    let ob = of();
+    this.subscribers.push(ob);
+    obs.map(() => this[HANDLE](this.value));
+    return ob;
+  },
   onValue(fn) {
     this.valueListeners.push(fn);
     if (this.active) fn(this.fn(this.value));

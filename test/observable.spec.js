@@ -144,6 +144,19 @@ test('[observable] Observable.plug', t => {
   obs.plug(4);
 });
 
+test('[observable] Observable.sampledBy', t => {
+  t.plan(1);
+  let expected = [1, 1, 1];
+  let output = [];
+  let obsX = observable.of(1);
+  let obsY = observable.of();
+  obsX.sampledBy(obsY).onValue(::output.push);
+  obsY.plug(4);
+  obsY.plug(11);
+  obsY.plug(12);
+  t.deepEqual(expected, output, 'should output its own value each time the sampled observable fires');
+});
+
 test('[observable] Observable.onError', t => {
   t.plan(1);
   let obs = observable.of(1).mapPromise(v =>
