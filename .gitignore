@@ -1,8 +1,8 @@
-core/
-decorators/
-observable/
-utils/
+/core/
+/decorators/
+/observable/
+/utils/
 node_modules/
 npm-debug.log
-index.js
+/index.js
 *.tgz
