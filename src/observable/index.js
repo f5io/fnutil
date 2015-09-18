@@ -1,3 +1,5 @@
+import { flatten } from '../utils';
+
 const id = x => x;
 const descriptor = {
   writable: false,
@@ -96,7 +98,7 @@ let Observable = {
   }
 }
 
-function merge(...obs) {
+function merge(obs) {
   let ob = of(id, {
     [HANDLE]: function(v) {
       setTimeout(() => this[EMIT](this.fn(v)));

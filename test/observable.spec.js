@@ -24,15 +24,16 @@ test('[observable] observable.merge', t => {
   let obsX = observable.of(1);
   let obsY = observable.of(2);
   let obsZ = observable.of(3);
-  let obs = observable.merge(
+  let obsN = observable.merge([
     obsX,
     obsY.filter(x => x === 2).map(x => x * 4),
     obsZ.filterNot(x => x === 3)
-  ).onValue(::output.push);
+  ]).onValue(::output.push);
   obsX.plug(10);
   obsY.plug(3);
   obsZ.plug(4);
   setTimeout(() => t.deepEqual(expected, output, 'should merge observables'), 10);
+
 });
 
 test('[observable] observable.combine', t => {
