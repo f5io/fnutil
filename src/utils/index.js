@@ -29,6 +29,12 @@ export default {
   sort(fn, x) {
     return Array.from(x).sort(fn);
   },
+  head(x) {
+    return x[0];
+  },
+  tail(x) {
+    return x[x.length - 1];
+  },
   compose(...a) {
     return x => a.reduceRight((y, fn) => fn(y), x);
   },

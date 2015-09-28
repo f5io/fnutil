@@ -11,6 +11,8 @@ import {
   reduce,
   concat,
   sort,
+  head,
+  tail,
   uniq
 } from '../utils';
 
@@ -90,6 +92,16 @@ test('[utils] sort', t => {
   let fn = sort((a, b) => b - a);
   t.deepEqual(fn(data), [10, 9, 8, 7, 6, 5, 4, 3, 2, 1], 'should curry an array`s sort method');
   t.deepEqual(data, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'should not mutate the original');
+});
+
+test('[utils] head', t => {
+  t.plan(1);
+  t.equal(head(data), 1, 'should get the first element in an array');
+});
+
+test('[utils] tail', t => {
+  t.plan(1);
+  t.equal(tail(data), 10, 'should get the last element in an array');
 });
 
 test('[utils] uniq', t => {
