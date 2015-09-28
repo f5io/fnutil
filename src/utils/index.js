@@ -22,6 +22,10 @@ export default {
     return x.reduce(fn, y);
   },
   @curry
+  concat(y, x) {
+    return x.concat(y);
+  },
+  @curry
   sort(fn, x) {
     return Array.from(x).sort(fn);
   },

@@ -9,6 +9,7 @@ import {
   composeLeft,
   map,
   reduce,
+  concat,
   sort,
   uniq
 } from '../utils';
@@ -74,6 +75,14 @@ test('[utils] reduce', t => {
   t.plan(1);
   let fn = reduce((acc, x) => acc + x, 0);
   t.deepEqual(fn(data), 55, 'should curry an array`s reduce method');
+});
+
+test('[utils] concat', t => {
+  t.plan(2);
+  let fn = concat([1, 2, 3]);
+  let str = concat(' world!');
+  t.deepEqual(fn(data), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3], 'should curry an array`s concat method');
+  t.equal(str('Hello'), 'Hello world!', 'should curry a string`s concat method');
 });
 
 test('[utils] sort', t => {
