@@ -11,6 +11,7 @@ import {
   reduce,
   concat,
   sort,
+  spread,
   head,
   tail,
   uniq
@@ -92,6 +93,12 @@ test('[utils] sort', t => {
   let fn = sort((a, b) => b - a);
   t.deepEqual(fn(data), [10, 9, 8, 7, 6, 5, 4, 3, 2, 1], 'should curry an array`s sort method');
   t.deepEqual(data, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'should not mutate the original');
+});
+
+test('[utils] spread', t => {
+  t.plan(1);
+  let fn = spread((a, b, c, d, e, f, g, h, i, j) => a + b + c + d + e + f + g + h + i + j);
+  t.equal(fn(data), 55, 'should spread the supplied array of arguments into the supplied function');
 });
 
 test('[utils] head', t => {
