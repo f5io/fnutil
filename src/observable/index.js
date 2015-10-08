@@ -1,5 +1,3 @@
-import { flatten } from '../utils';
-
 const id = x => x;
 const descriptor = {
   writable: false,
@@ -15,7 +13,7 @@ const HANDLE = Symbol('Obs.HANDLE');
 let Observable = {
   map(f) {
     let obs = of(f);
-    if (this.active) obs.plug(this.fn(this.value));
+    if (this.active) obs.plug(this.outValue);
     this.subscribers.push(obs);
     return obs;
   },
@@ -32,7 +30,7 @@ let Observable = {
           });
       }
     });
-    if (this.active) obs.plug(this.fn(this.value), false);
+    if (this.active) obs.plug(this.outValue, false);
     this.subscribers.push(obs);
     return obs.map(id);
   },
@@ -44,7 +42,7 @@ let Observable = {
         this[EMIT](v);
       }
     });
-    if (this.active) obs.plug(this.fn(this.value), false);
+    if (this.active) obs.plug(this.outValue, false);
     this.subscribers.push(obs);
     return obs;
   },
@@ -52,23 +50,23 @@ let Observable = {
     return this.filter(v => !f(v));
   },
   plug(v, active = true) {
-    Object.defineProperty(this, 'value', {
+    Object.defineProperty(this, 'inValue', {
       value: v
     });
     this[ACTIVE](active);
-    this[HANDLE](this.value);
+    this[HANDLE](this.inValue);
     return this;
   },
   sampledBy(obs) {
     let ob = of();
     obs.map(() => {
-      ob.plug(this.fn(this.value))
+      ob.plug(this.fn(this.inValue))
     });
     return ob;
   },
   onValue(fn) {
     this.valueListeners.push(fn);
-    if (this.active) fn(this.fn(this.value));
+    if (this.active) fn(this.outValue);
     return this;
   },
   offValue(fn) {
@@ -86,7 +84,7 @@ let Observable = {
     return this;
   },
   valueOf() {
-    return this.fn(this.value);
+    return this.fn(this.inValue);
   },
   [ACTIVE]: function(boo) {
     this.subscribers.forEach(obs => obs[ACTIVE](boo));
@@ -99,8 +97,11 @@ let Observable = {
   },
   [EMIT]: function(v) {
     if (!this.active) return;
-    this.valueListeners.forEach(fn => fn(v));
-    this.subscribers.forEach(obs => obs.plug(v, this.active));
+    Object.defineProperty(this, 'outValue', {
+      value: v
+    });
+    this.valueListeners.forEach(fn => fn(this.outValue));
+    this.subscribers.forEach(obs => obs.plug(this.outValue, this.active));
   },
   [ERROR]: function(err) {
     this.errorListeners.forEach(fn => fn(err));
@@ -141,7 +142,12 @@ function of(val = id, proto = {}) {
     ...Observable,
     ...proto
   }, {
-    value: {
+    inValue: {
+      value: value,
+      ...descriptor,
+      enumerable: true
+    },
+    outValue: {
       value: value,
       ...descriptor,
       enumerable: true

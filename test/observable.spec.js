@@ -36,7 +36,6 @@ test('[observable] observable.merge', t => {
   obsY.plug(3);
   obsZ.plug(4);
   t.deepEqual(expected, output, 'should merge observables');
-
 });
 
 test('[observable] observable.combine', t => {
