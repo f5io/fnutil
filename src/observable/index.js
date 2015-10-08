@@ -71,8 +71,18 @@ let Observable = {
     if (this.active) fn(this.fn(this.value));
     return this;
   },
+  offValue(fn) {
+    let index = this.valueListeners.indexOf(fn);
+    if (index > -1) this.valueListeners.splice(index, 1);
+    return this;
+  },
   onError(fn) {
     this.errorListeners.push(fn);
+    return this;
+  },
+  offError(fn) {
+    let index = this.errorListeners.indexOf(fn);
+    if (index > -1) this.errorListeners.splice(index, 1);
     return this;
   },
   valueOf() {
