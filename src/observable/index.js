@@ -109,14 +109,10 @@ let Observable = {
 }
 
 function merge(obs) {
-  let ob = of(id, {
-    [HANDLE]: function(v) {
-      setTimeout(() => this[EMIT](this.fn(v)));
-    }
-  });
+  let ob = of();
   obs.forEach(o => {
     o.subscribers.push(ob);
-    o[HANDLE](o.value);
+    if (o.active) o[HANDLE](o.value);
   });
   return ob;
 }
