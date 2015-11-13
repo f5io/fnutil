@@ -16,6 +16,8 @@
   ],
   "scripts": {
     "compile": "babel --out-dir ./ src",
+    "coverage": "isparta cover --report lcov ./test -- test/**/*.spec.js",
+    "coveralls": "npm run coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test": "npm run compile && node ./test test/**/*.spec.js | tap-bail | tap-difflet",
     "watch": "watch 'npm test' src test",
     "prepublish": "npm test"
@@ -24,6 +26,7 @@
   "license": "MIT",
   "devDependencies": {
     "babel": "^5.8.34",
+    "coveralls": "^2.11.4",
     "glob": "^6.0.1",
     "tap-bail": "0.0.0",
     "tap-difflet": "^0.3.0",

@@ -170,7 +170,9 @@ test('[observable] Observable.onError', t => {
 test('[observable] Observable.onValue', t => {
   t.plan(1);
   let obs = observable.of(1);
+  let obsX = observable.of();
   obs.onValue(v => t.pass('value handler should fire'));
+  obsX.onValue(v => t.fail('value handler should not fire'));
 });
 
 test('[observable] Observable.offValue', t => {
