@@ -1,6 +1,6 @@
 {
   "name": "fnutil",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "ES6 Functional Utilities",
   "main": "./",
   "repository": "https://github.com/f5io/fnutil",
@@ -8,20 +8,23 @@
     "node": ">=4.0.0"
   },
   "files": [
-    "index.js", "core", "decorators", "observable", "utils"
+    "index.js",
+    "core",
+    "decorators",
+    "observable",
+    "utils"
   ],
   "scripts": {
-    "compile": "babel --stage 0 --out-dir ./ src",
-    "test": "npm run compile && babel-tape-runner test/**/*.js | tap-bail | tap-difflet",
+    "compile": "babel --out-dir ./ src",
+    "test": "npm run compile && node ./test test/**/*.spec.js | tap-bail | tap-difflet",
     "watch": "watch 'npm test' src test",
     "prepublish": "npm test"
   },
   "author": "Joe Harlow",
   "license": "MIT",
   "devDependencies": {
-    "babel": "^5.5.6",
-    "babel-runtime": "^5.5.6",
-    "babel-tape-runner": "^1.2.0",
+    "babel": "^5.8.34",
+    "glob": "^6.0.1",
     "tap-bail": "0.0.0",
     "tap-difflet": "^0.3.0",
     "tape": "^4.2.0",
