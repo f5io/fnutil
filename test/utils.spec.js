@@ -14,7 +14,9 @@ import {
   spread,
   head,
   tail,
-  uniq
+  uniq,
+  reverse,
+  split
 } from '../utils';
 
 const data = Array.from({ length: 10 }, (v, k) => ++k);
@@ -99,6 +101,18 @@ test('[utils] spread', t => {
   t.plan(1);
   let fn = spread((a, b, c, d, e, f, g, h, i, j) => a + b + c + d + e + f + g + h + i + j);
   t.equal(fn(data), 55, 'should spread the supplied array of arguments into the supplied function');
+});
+
+test('[utils] reverse', t => {
+  t.plan(2);
+  t.deepEqual(reverse(data), [10, 9, 8, 7, 6, 5, 4, 3, 2, 1], 'should reverse the supplied array');
+  t.deepEqual(data, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'should not mutate the original');
+});
+
+test('[utils] split', t => {
+  t.plan(1);
+  let fn = split(' ');
+  t.deepEqual(fn('hello world'), ['hello', 'world'], 'should curry a strings split method');
 });
 
 test('[utils] head', t => {

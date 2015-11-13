@@ -28,17 +28,24 @@ export default {
   },
   @curry
   sort(fn, x) {
-    return Array.from(x).sort(fn);
+    return [...x].sort(fn);
   },
   @curry
   spread(fn, x) {
     return fn(...x);
+  },
+  @curry
+  split(by, x) {
+    return x.split(by);
   },
   head(x) {
     return x[0];
   },
   tail(x) {
     return x[x.length - 1];
+  },
+  reverse(x) {
+    return [...x].reverse();
   },
   compose(...a) {
     return x => a.reduceRight((y, fn) => fn(y), x);
