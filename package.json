@@ -28,7 +28,7 @@
     "babel": "^5.8.34",
     "coveralls": "^2.11.4",
     "glob": "^6.0.1",
-    "isparta": "^4.0.0",
+    "isparta": "^3.5.1",
     "tap-bail": "0.0.0",
     "tap-difflet": "^0.3.0",
     "tape": "^4.2.0",
