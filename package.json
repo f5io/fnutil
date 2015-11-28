@@ -1,6 +1,6 @@
 {
   "name": "fnutil",
-  "version": "0.2.11",
+  "version": "0.3.0",
   "description": "ES6 Functional Utilities",
   "main": "./",
   "repository": "https://github.com/f5io/fnutil",
@@ -10,6 +10,7 @@
   "files": [
     "index.js",
     "core",
+    "csp",
     "decorators",
     "observable",
     "utils"
