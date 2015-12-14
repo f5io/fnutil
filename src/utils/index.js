@@ -1,11 +1,11 @@
 import { curry } from '../decorators';
 
-let flatten = a =>
+const flatten = a =>
   a.reduce((acc, x) =>
       Array.isArray(x) ? acc.concat(flatten(x)) :
       acc.concat(x), []);
 
-export default {
+const utils = {
   @curry
   filter(fn, x) {
     return x.filter(fn);
@@ -64,4 +64,19 @@ export default {
     return a.reduce((acc, x) => acc.concat(x), []);
   },
   flatten
+}
+
+const {
+  filter, filterNot, map, reduce,
+  concat, sort, spread, split, head,
+  tail, reverse, compose, composeLeft,
+  uniq, filterSplit, combine
+} = utils;
+
+export {
+  filter, filterNot, map, reduce,
+  concat, sort, spread, split, head,
+  tail, reverse, compose, composeLeft,
+  uniq, filterSplit, combine, flatten
 };
+export default utils;

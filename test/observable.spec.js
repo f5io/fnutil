@@ -1,5 +1,5 @@
 import test from 'tape';
-import observable from '../observable';
+import observable from '../src/observable';
 
 test('[observable] methods', t => {
   t.plan(4);
@@ -21,7 +21,7 @@ test('[observable] observable.merge', t => {
   t.plan(1);
   const expected = [1, 8, 10, 4];
   let output = [];
-  let obsX = observable.of();
+  let obsX = observable.of(1);
   let obsY = observable.of();
   let obsZ = observable.of();
   let obsN = observable.merge([
@@ -29,7 +29,6 @@ test('[observable] observable.merge', t => {
     obsY.filter(x => x === 2).map(x => x * 4),
     obsZ.filterNot(x => x === 3)
   ]).onValue(::output.push);
-  obsX.plug(1);
   obsY.plug(2);
   obsZ.plug(3);
   obsX.plug(10);

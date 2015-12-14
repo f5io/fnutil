@@ -17,7 +17,7 @@ import {
   uniq,
   reverse,
   split
-} from '../utils';
+} from '../src/utils';
 
 const data = Array.from({ length: 10 }, (v, k) => ++k);
 

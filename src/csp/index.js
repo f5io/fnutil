@@ -45,4 +45,5 @@ const alts = (...chs) =>
       return ch.messages.pop();
     });
 
+export { channel, timeout, put, take, alts };
 export default { channel, timeout, put, take, alts };

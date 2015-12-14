@@ -1,6 +1,6 @@
 import test from 'tape';
-import lib from '../';
-import { curry } from '../core';
+import lib from '../src';
+import { curry } from '../src/core';
 import {
   filter,
   filterSplit,
@@ -9,8 +9,8 @@ import {
   map,
   sort,
   uniq
-} from '../utils';
-import { curry as curryDec } from '../decorators';
+} from '../src/utils';
+import { curry as curryDec } from '../src/decorators';
 
 const data = Array.from({ length: 10 }, (v, k) => ++k);
 

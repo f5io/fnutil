@@ -3,7 +3,7 @@ import {
   curry,
   curryRight,
   memoize
-} from '../core';
+} from '../src/core';
 
 let toCurry = (x, y, z) => (x * y) + z;
 let toMemoize = x => x.foo;

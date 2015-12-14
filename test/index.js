@@ -1,5 +1,4 @@
-require('babel/register');
-
+require('babel-register');
 var glob = require('glob');
 var path = require('path');
 

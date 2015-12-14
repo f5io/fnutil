@@ -122,7 +122,7 @@ const merge = (obs) => {
   let ob = of();
   obs.forEach(o => {
     o.subscribers.push(ob);
-    if (o.active) o[handle](o.value);
+    if (o.active) o[handle](o.inValue);
   });
   return ob;
 }
@@ -143,4 +143,5 @@ const combine = (obs, combinator = id) => {
   return ob;
 }
 
+export { of, merge, combine };
 export default { of, merge, combine };

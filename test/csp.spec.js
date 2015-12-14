@@ -1,5 +1,5 @@
 import test from 'tape';
-import csp, { channel, timeout, put, take, alts } from '../csp';
+import csp, { channel, timeout, put, take, alts } from '../src/csp';
 
 test('[csp] methods', t => {
   t.plan(6);
