@@ -1,4 +1,4 @@
-export default function curry(fn, args = []) {
+export function curry(fn, args = []) {
 	return (...a) => {
 		let x = args.concat(a);
 		return x.length >= fn.length ?
@@ -6,3 +6,5 @@ export default function curry(fn, args = []) {
 			curry(fn, x);
 	}
 }
+
+export default curry;

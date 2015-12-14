@@ -1,3 +1,6 @@
-export { default as curry } from './curry';
-export { default as curryRight } from './curryRight';
-export { default as memoize } from './memoize';
+import { curry } from './curry';
+import { curryRight } from './curryRight';
+import { memoize } from './memoize';
+
+export { curry, curryRight, memoize };
+export default { curry, curryRight, memoize};

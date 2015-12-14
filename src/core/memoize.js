@@ -1,4 +1,4 @@
-export default function memoize(fn) {
+export function memoize(fn) {
 	let cache = new Map();
 	let memo = (...a) => {
 		let key = a.reduce((hash, val) =>
@@ -13,3 +13,5 @@ export default function memoize(fn) {
 		_cache: { value: () => cache }
 	});
 }
+
+export default memoize;
