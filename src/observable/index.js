@@ -1,180 +1,147 @@
-// const id = x => x;
-// const descriptor = {
-//   writable: false,
-//   enumerable: false,
-//   configurable: true
-// };
+const id = x => x;
 
-// const EMIT = Symbol('Obs.EMIT');
-// const ERROR = Symbol('Obs.ERROR');
-// const ACTIVE = Symbol('Obs.ACTIVE');
-// const HANDLE = Symbol('Obs.HANDLE');
+const emit = Symbol('emit');
+const error = Symbol('error');
+const active = Symbol('active');
+const handle = Symbol('handle');
 
-// let Observable = {
-//   map(f) {
-//     let obs = of(f);
-//     if (this.active) obs.plug(this.outValue);
-//     this.subscribers.push(obs);
-//     return obs;
-//   },
-//   mapPromise(f) {
-//     let obs = of(id, {
-//       [HANDLE]: function(v) {
-//         f(v)
-//           .then(x => {
-//             this[ACTIVE](true);
-//             this[EMIT](x);
-//           })
-//           .catch(e => {
-//             this[ERROR](e);
-//           });
-//       }
-//     });
-//     if (this.active) obs.plug(this.outValue, false);
-//     this.subscribers.push(obs);
-//     return obs.map(id);
-//   },
-//   filter(f) {
-//     let obs = of(id, {
-//       [HANDLE]: function(v) {
-//         let res = f(v);
-//         this[ACTIVE](!!res);
-//         this[EMIT](v);
-//       }
-//     });
-//     if (this.active) obs.plug(this.outValue, false);
-//     this.subscribers.push(obs);
-//     return obs;
-//   },
-//   filterNot(f) {
-//     return this.filter(v => !f(v));
-//   },
-//   plug(v, active = true) {
-//     Object.defineProperty(this, 'inValue', {
-//       value: v
-//     });
-//     this[ACTIVE](active);
-//     this[HANDLE](this.inValue);
-//     return this;
-//   },
-//   sampledBy(obs) {
-//     let ob = of();
-//     obs.map(() => {
-//       ob.plug(this.fn(this.inValue))
-//     });
-//     return ob;
-//   },
-//   onValue(fn) {
-//     this.valueListeners.push(fn);
-//     if (this.active) fn(this.outValue);
-//     return this;
-//   },
-//   offValue(fn) {
-//     let index = this.valueListeners.indexOf(fn);
-//     if (index > -1) this.valueListeners.splice(index, 1);
-//     return this;
-//   },
-//   onError(fn) {
-//     this.errorListeners.push(fn);
-//     return this;
-//   },
-//   offError(fn) {
-//     let index = this.errorListeners.indexOf(fn);
-//     if (index > -1) this.errorListeners.splice(index, 1);
-//     return this;
-//   },
-//   valueOf() {
-//     return this.fn(this.inValue);
-//   },
-//   [ACTIVE]: function(boo) {
-//     this.subscribers.forEach(obs => obs[ACTIVE](boo));
-//     return Object.defineProperty(this, 'active', {
-//       value: boo
-//     });
-//   },
-//   [HANDLE]: function(v) {
-//     this[EMIT](this.fn(v));
-//   },
-//   [EMIT]: function(v) {
-//     if (!this.active) return;
-//     Object.defineProperty(this, 'outValue', {
-//       value: v
-//     });
-//     this.valueListeners.forEach(fn => fn(this.outValue));
-//     this.subscribers.forEach(obs => obs.plug(this.outValue, this.active));
-//   },
-//   [ERROR]: function(err) {
-//     this.errorListeners.forEach(fn => fn(err));
-//     this.subscribers.forEach(obs => obs[ERROR](err));
-//   }
-// }
+class Observable {
+  static of(val) {
+    return new Observable(val);
+  }
+  constructor(val = id) {
+    const isFunction = typeof val === 'function';
+    this.inValue = !isFunction ? val : null;
+    this.outValue = this.inValue;
+    this.fn = isFunction ? val : id;
+    this.subscribers = [];
+    this.valueListeners = [];
+    this.errorListeners = [];
+    this.active = this.inValue !== null;
+  }
+  map(f) {
+    let obs = Observable.of(f);
+    if (this.active) obs.plug(this.outValue);
+    this.subscribers.push(obs);
+    return obs;
+  }
+  mapPromise(f) {
+    let obs = new DeferredObservable(f);
+    if (this.active) obs.plug(this.outValue, false);
+    this.subscribers.push(obs);
+    return obs.map(id);
+  }
+  filter(f) {
+    let obs = new FilteredObservable(f);
+    if (this.active) obs.plug(this.outValue, false);
+    this.subscribers.push(obs);
+    return obs;
+  }
+  filterNot(f) {
+    return this.filter(v => !f(v));
+  }
+  plug(v, act = true) {
+    this.inValue = v;
+    this[active](act);
+    this[handle](this.inValue);
+    return this;
+  }
+  sampledBy(obs) {
+    let ob = Observable.of();
+    obs.map(() => {
+      ob.plug(this.fn(this.inValue))
+    });
+    return ob;
+  }
+  onValue(fn) {
+    this.valueListeners.push(fn);
+    if (this.active) fn(this.outValue);
+    return this;
+  }
+  offValue(fn) {
+    let index = this.valueListeners.indexOf(fn);
+    if (index > -1) this.valueListeners.splice(index, 1);
+    return this;
+  }
+  onError(fn) {
+    this.errorListeners.push(fn);
+    return this;
+  }
+  offError(fn) {
+    let index = this.errorListeners.indexOf(fn);
+    if (index > -1) this.errorListeners.splice(index, 1);
+    return this;
+  }
+  valueOf() {
+    return this.fn(this.inValue);
+  }
+  [active](boo) {
+    this.subscribers.forEach(obs => obs[active](boo));
+    this.active = boo;
+    return this;
+  }
+  [handle](v) {
+    this[emit](this.fn(v));
+  }
+  [emit](v) {
+    if (!this.active) return;
+    this.outValue = v;
+    this.valueListeners.forEach(fn => fn(this.outValue));
+    this.subscribers.forEach(obs => obs.plug(this.outValue, this.active));
+  }
+  [error](err) {
+    this.errorListeners.forEach(fn => fn(err));
+    this.subscribers.forEach(obs => obs[error](err));
+  }
+}
 
-// function merge(obs) {
-//   let ob = of();
-//   obs.forEach(o => {
-//     o.subscribers.push(ob);
-//     if (o.active) o[HANDLE](o.value);
-//   });
-//   return ob;
-// }
+class DeferredObservable extends Observable {
+  [handle](v) {
+    this.fn(v)
+      .then(x => {
+        this[active](true);
+        this[emit](x);
+      })
+      .catch(e => {
+        this[error](e);
+      });
+  }
+}
 
-// function combine(obs, combinator = id) {
-//   let ob = of();
-//   let buffer = [];
-//   let addToBuffer = (i, v) => {
-//     buffer[i] = v;
-//     if (obs.length === buffer.filter(x => typeof x !== 'undefined').length) {
-//       ob.plug(combinator(buffer));
-//       buffer = [];
-//     }
-//   };
-//   obs.forEach((o, i) => {
-//     o.map(addToBuffer.bind(null, i));
-//   });
-//   return ob;
-// }
+class FilteredObservable extends Observable {
+  [handle](v) {
+    let res = this.fn(v);
+    this[active](!!res);
+    this[emit](v);
+  }
+}
 
-// function of(val = id, proto = {}) {
-//   let isFunction = typeof val === 'function';
-//   let value = null;
-//   if (!isFunction) value = val;
-//   return Object.create({
-//     ...Observable,
-//     ...proto
-//   }, {
-//     inValue: {
-//       value: value,
-//       ...descriptor,
-//       enumerable: true
-//     },
-//     outValue: {
-//       value: value,
-//       ...descriptor,
-//       enumerable: true
-//     },
-//     fn: {
-//       value: isFunction ? val : id,
-//       ...descriptor
-//     },
-//     active: {
-//       value: value !== null,
-//       ...descriptor
-//     },
-//     subscribers: {
-//       value: [],
-//       ...descriptor
-//     },
-//     valueListeners: {
-//       value: [],
-//       ...descriptor
-//     },
-//     errorListeners: {
-//       value: [],
-//       ...descriptor
-//     }
-//   });
-// }
+const of = Observable.of;
 
-import { of, merge, combine } from './rewrite';
+const merge = (obs) => {
+  let ob = of();
+  obs.forEach(o => {
+    o.subscribers.push(ob);
+    if (o.active) o[handle](o.inValue);
+  });
+  return ob;
+}
 
-export default { merge, combine, of };
+const combine = (obs, combinator = id) => {
+  let ob = of();
+  let buffer = [];
+  let addToBuffer = (i, v) => {
+    buffer[i] = v;
+    if (obs.length === buffer.filter(x => typeof x !== 'undefined').length) {
+      ob.plug(combinator(buffer));
+      buffer = [];
+    }
+  };
+  obs.forEach((o, i) => {
+    o.map(addToBuffer.bind(null, i));
+  });
+  return ob;
+}
+
+export { of, merge, combine };
+export default { of, merge, combine };
